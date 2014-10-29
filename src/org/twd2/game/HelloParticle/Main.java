@@ -6,7 +6,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO è‡ªåŠ¨ç”Ÿæˆçš„æ–¹æ³•å­˜æ ¹
 		/*Vector2D a=new Vector2D(1,1);
 		Vector2D b=Vector2D.makeNew(1, 45.0f/180.0f*(float)Math.PI);
 		Vector2D c=new Vector2D(2,3);

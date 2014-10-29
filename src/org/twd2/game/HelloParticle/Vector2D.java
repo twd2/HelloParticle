@@ -6,7 +6,7 @@ public class Vector2D {
 	public double x,y;	
 	
 	/**
-	 * ¹¹ÔìÁãÏòÁ¿
+	 * æ„é€ é›¶å‘é‡
 	 */
 	public Vector2D() {
 		this.x=0;
@@ -14,9 +14,9 @@ public class Vector2D {
 	}
 	
 	/**
-	 * Ê¹ÓÃ×ø±ê¹¹ÔìÏòÁ¿ 
-	 * @param x ºá×ø±ê
-	 * @param y ×İ×ø±ê
+	 * ä½¿ç”¨åæ ‡æ„é€ å‘é‡ 
+	 * @param x æ¨ªåæ ‡
+	 * @param y çºµåæ ‡
 	 */
 	public Vector2D(double x, double y) {
 		this.x=x;
@@ -24,17 +24,17 @@ public class Vector2D {
 	}
 
 	/**
-	 * ¸ù¾İ½Ç¶ÈºÍ³¤¶È´´½¨ÏòÁ¿ 
-	 * @param length ³¤¶È
-	 * @param rad ½Ç¶È
-	 * @return ĞÂÏòÁ¿
+	 * æ ¹æ®è§’åº¦å’Œé•¿åº¦åˆ›å»ºå‘é‡ 
+	 * @param length é•¿åº¦
+	 * @param rad è§’åº¦
+	 * @return æ–°å‘é‡
 	 */
 	public static Vector2D makeNew(double length,double rad) {
 		return new Vector2D(length*Math.cos(rad),length*Math.sin(rad));
 	}
 	
 	/**
-	 * ·µ»Ø×ÖÃæÖµ
+	 * è¿”å›å­—é¢å€¼
 	 */
 	public String toString()
 	{
@@ -43,9 +43,9 @@ public class Vector2D {
 	}
 	
 	/**
-	 * ÏòÁ¿¼Ó·¨
-	 * @param b ÁíÍâÒ»¸öÏòÁ¿ 
-	 * @return ºÍ
+	 * å‘é‡åŠ æ³•
+	 * @param b å¦å¤–ä¸€ä¸ªå‘é‡ 
+	 * @return å’Œ
 	 */
 	public Vector2D add(Vector2D b){
 		Vector2D v=new Vector2D(x,y);
@@ -55,9 +55,9 @@ public class Vector2D {
 	}
 	
 	/**
-	 * Êı³ËÏòÁ¿
-	 * @param n Êı
-	 * @return ĞÂÏòÁ¿
+	 * æ•°ä¹˜å‘é‡
+	 * @param n æ•°
+	 * @return æ–°å‘é‡
 	 */
 	public Vector2D mul(double n){
 		Vector2D v=new Vector2D(x,y);
@@ -67,66 +67,66 @@ public class Vector2D {
 	}
 	
 	/**
-	 * ¼ÆËãµã»ı
-	 * @param b ÁíÍâÒ»¸öÏòÁ¿
-	 * @return µã»ı
+	 * è®¡ç®—ç‚¹ç§¯
+	 * @param b å¦å¤–ä¸€ä¸ªå‘é‡
+	 * @return ç‚¹ç§¯
 	 */
 	public double DotP(Vector2D b){
 		return this.x*b.x+this.y*b.y;
 	}
 	
 	/**
-	 * ¼ÆËã²æ»ı 
-	 * @param b ÁíÍâÒ»¸öÏòÁ¿
-	 * @return ²æ»ı 
+	 * è®¡ç®—å‰ç§¯ 
+	 * @param b å¦å¤–ä¸€ä¸ªå‘é‡
+	 * @return å‰ç§¯ 
 	 */
 	public double CrossP(Vector2D b){
 		return this.x*b.y-b.x*this.y;
 	}
 	
 	/**
-	 * »ñµÃÏòÁ¿µÄ½Ç¶È
-	 * @return ÏòÁ¿µÄ½Ç¶È
+	 * è·å¾—å‘é‡çš„è§’åº¦
+	 * @return å‘é‡çš„è§’åº¦
 	 */
 	public double rad(){
 		return Math.atan2(y,x);
 	}
 	
 	/**
-	 * »ñµÃÏòÁ¿Ä£µÄÆ½·½
-	 * @return ÏòÁ¿Ä£µÄÆ½·½
+	 * è·å¾—å‘é‡æ¨¡çš„å¹³æ–¹
+	 * @return å‘é‡æ¨¡çš„å¹³æ–¹
 	 */
 	public double length2(){
 		return x*x+y*y;
 	}
 	
 	/**
-	 * »ñµÃÏòÁ¿µÄÄ£
-	 * @return ÏòÁ¿µÄÄ£
+	 * è·å¾—å‘é‡çš„æ¨¡
+	 * @return å‘é‡çš„æ¨¡
 	 */
 	public double length(){
 		return Math.sqrt(x*x+y*y);
 	}
 	
 	/**
-	 * »ñµÃµ¥Î»ÏòÁ¿
-	 * @return µ¥Î»ÏòÁ¿
+	 * è·å¾—å•ä½å‘é‡
+	 * @return å•ä½å‘é‡
 	 */
 	public Vector2D unit(){
 		return this.mul(1f/length());
 	}
 
 	/**
-	 * ÄæÊ±ÕëĞı×ª90¡ã
-	 * @return ÏòÁ¿
+	 * é€†æ—¶é’ˆæ—‹è½¬90Â°
+	 * @return å‘é‡
 	 */
 	public Vector2D rotatePositive90() {
 		return new Vector2D(-y, x);
 	}
 	
 	/**
-	 * Ë³Ê±ÕëĞı×ª90¡ã
-	 * @return ÏòÁ¿
+	 * é¡ºæ—¶é’ˆæ—‹è½¬90Â°
+	 * @return å‘é‡
 	 */
 	public Vector2D rotateNegative90() {
 		return new Vector2D(y, -x);

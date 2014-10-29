@@ -9,13 +9,13 @@ public class World {
 	public boolean enableGravity=true;//true;
 	public boolean enableCoulombForce=true;//=true;
 	
-	public final double G=6.6732e-11d; //ÍòÓĞÒıÁ¦³£Êı
-	public final double k=8987000000d; //¿âÂ×¶¨ÂÉ³£Êı
+	public final double G=6.6732e-11d; //ä¸‡æœ‰å¼•åŠ›å¸¸æ•°
+	public final double k=8987000000d; //åº“ä¼¦å®šå¾‹å¸¸æ•°
 	
 	public ElectricField E=new ElectricField();
-	public Vector2D g=new Vector2D(0,-9.80665d);//µç³¡¡¢ÖØÁ¦¼ÓËÙ¶È
+	public Vector2D g=new Vector2D(0,-9.80665d);//ç”µåœºã€é‡åŠ›åŠ é€Ÿåº¦
 	public Magnetic B=new Magnetic();
-	public double u=0.0; //È«¾Ö×èÄáÏµÊı
+	public double u=0.0; //å…¨å±€é˜»å°¼ç³»æ•°
 	
 	ArrayList<Particle> ap=new ArrayList<Particle>();
 	ArrayList<Magnetic> aB=new ArrayList<Magnetic>();
@@ -69,15 +69,15 @@ public class World {
 	
 	public void next(double dt, boolean collision) {
 		if (!collision) {
-			calcForce(); //ÊÜÁ¦·ÖÎö
-			calcAcceleration(); //ÓÃÁ¦Ëã³ö¼ÓËÙ¶È
-			calcPosition(dt); //¼ÆËãĞÂÎ»ÖÃ
-			calcVelocity(dt); //ÓÃ¼ÓËÙ¶ÈËã³ö¸ÃÊ±¿ÌÄ©µÄËÙ¶È
+			calcForce(); //å—åŠ›åˆ†æ
+			calcAcceleration(); //ç”¨åŠ›ç®—å‡ºåŠ é€Ÿåº¦
+			calcPosition(dt); //è®¡ç®—æ–°ä½ç½®
+			calcVelocity(dt); //ç”¨åŠ é€Ÿåº¦ç®—å‡ºè¯¥æ—¶åˆ»æœ«çš„é€Ÿåº¦
 		} else {
 			while(dt>0.0) {
-				calcForce(); //ÊÜÁ¦·ÖÎö
-				calcAcceleration(); //ÓÃÁ¦Ëã³ö¼ÓËÙ¶È
-				dt-=calcCollision(dt); //Åö×²¼ì²â
+				calcForce(); //å—åŠ›åˆ†æ
+				calcAcceleration(); //ç”¨åŠ›ç®—å‡ºåŠ é€Ÿåº¦
+				dt-=calcCollision(dt); //ç¢°æ’æ£€æµ‹
 				break;
 			}
 		}
@@ -96,48 +96,48 @@ public class World {
 		
 		if (enableGravity || enableCoulombForce) {
 			if (enableGravity && enableCoulombForce) {
-				//ÍòÓĞÒıÁ¦¡¢¿âÂ×Á¦
+				//ä¸‡æœ‰å¼•åŠ›ã€åº“ä¼¦åŠ›
 				for(int i=0;i<ap.size();++i) {
 					Particle cp=ap.get(i);
-					if (cp==p) continue; //¶Ô×Ô¼º²»½øĞĞÍòÓĞÒıÁ¦¡¢¿âÂ×Á¦ÊÜÁ¦·ÖÎö
+					if (cp==p) continue; //å¯¹è‡ªå·±ä¸è¿›è¡Œä¸‡æœ‰å¼•åŠ›ã€åº“ä¼¦åŠ›å—åŠ›åˆ†æ
 					if (!cp.enable) continue;
-					Vector2D delta=p.position.add(cp.position.mul(-1)); //Ö¸Ïò±»·ÖÎö¶ÔÏó
+					Vector2D delta=p.position.add(cp.position.mul(-1)); //æŒ‡å‘è¢«åˆ†æå¯¹è±¡
 					double R2=delta.length2();
 					double R=Math.sqrt(R2);
-					Vector2D F0=delta.mul(1f/R); //Á¦Ö¸Ïò±»·ÖÎö¶ÔÏóµÄµ¥Î»ÏòÁ¿
+					Vector2D F0=delta.mul(1f/R); //åŠ›æŒ‡å‘è¢«åˆ†æå¯¹è±¡çš„å•ä½å‘é‡
 					 
-					Vector2D FG=F0.mul(-G*p.m*cp.m/R2); //ÍòÓĞÒıÁ¦, ¸ººÅÊÇÎªÁËÊ¹µÃÁ¦·½Ïò·´Ïò´Ó¶øÖ¸ÏòÁíÍâÒ»¸ö¶ÔÏó, ÎüÒıÁ¦
-					Vector2D Fk=F0.mul(k*p.q*cp.q/R2); //¿âÂ×Á¦, Í¬³âÒìÎü
+					Vector2D FG=F0.mul(-G*p.m*cp.m/R2); //ä¸‡æœ‰å¼•åŠ›, è´Ÿå·æ˜¯ä¸ºäº†ä½¿å¾—åŠ›æ–¹å‘åå‘ä»è€ŒæŒ‡å‘å¦å¤–ä¸€ä¸ªå¯¹è±¡, å¸å¼•åŠ›
+					Vector2D Fk=F0.mul(k*p.q*cp.q/R2); //åº“ä¼¦åŠ›, åŒæ–¥å¼‚å¸
 					p.force=p.force.add(FG).add(Fk);
 				}
 			}
 			if (enableGravity && !enableCoulombForce) {
-				//½öÍòÓĞÒıÁ¦
+				//ä»…ä¸‡æœ‰å¼•åŠ›
 				for(int i=0;i<ap.size();++i) {
 					Particle cp=ap.get(i);
-					if (cp==p) continue; //¶Ô×Ô¼º²»½øĞĞÍòÓĞÒıÁ¦¡¢¿âÂ×Á¦ÊÜÁ¦·ÖÎö
+					if (cp==p) continue; //å¯¹è‡ªå·±ä¸è¿›è¡Œä¸‡æœ‰å¼•åŠ›ã€åº“ä¼¦åŠ›å—åŠ›åˆ†æ
 					if (!cp.enable) continue;
-					Vector2D delta=p.position.add(cp.position.mul(-1)); //Ö¸Ïò±»·ÖÎö¶ÔÏó
+					Vector2D delta=p.position.add(cp.position.mul(-1)); //æŒ‡å‘è¢«åˆ†æå¯¹è±¡
 					double R2=delta.length2();
 					double R=Math.sqrt(R2);
-					Vector2D F0=delta.mul(1f/R); //Á¦Ö¸Ïò±»·ÖÎö¶ÔÏóµÄµ¥Î»ÏòÁ¿
+					Vector2D F0=delta.mul(1f/R); //åŠ›æŒ‡å‘è¢«åˆ†æå¯¹è±¡çš„å•ä½å‘é‡
 					 
-					Vector2D FG=F0.mul(-G*p.m*cp.m/R2); //ÍòÓĞÒıÁ¦, ¸ººÅÊÇÎªÁËÊ¹µÃÁ¦·½Ïò·´Ïò´Ó¶øÖ¸ÏòÁíÍâÒ»¸ö¶ÔÏó, ÎüÒıÁ¦
+					Vector2D FG=F0.mul(-G*p.m*cp.m/R2); //ä¸‡æœ‰å¼•åŠ›, è´Ÿå·æ˜¯ä¸ºäº†ä½¿å¾—åŠ›æ–¹å‘åå‘ä»è€ŒæŒ‡å‘å¦å¤–ä¸€ä¸ªå¯¹è±¡, å¸å¼•åŠ›
 					p.force=p.force.add(FG);
 				}
 			}
 			if (!enableGravity && enableCoulombForce) {
-				//½ö¿âÂ×Á¦
+				//ä»…åº“ä¼¦åŠ›
 				for(int i=0;i<ap.size();++i) {
 					Particle cp=ap.get(i);
-					if (cp==p) continue; //¶Ô×Ô¼º²»½øĞĞÍòÓĞÒıÁ¦¡¢¿âÂ×Á¦ÊÜÁ¦·ÖÎö
+					if (cp==p) continue; //å¯¹è‡ªå·±ä¸è¿›è¡Œä¸‡æœ‰å¼•åŠ›ã€åº“ä¼¦åŠ›å—åŠ›åˆ†æ
 					if (!cp.enable) continue;
-					Vector2D delta=p.position.add(cp.position.mul(-1)); //Ö¸Ïò±»·ÖÎö¶ÔÏó
+					Vector2D delta=p.position.add(cp.position.mul(-1)); //æŒ‡å‘è¢«åˆ†æå¯¹è±¡
 					double R2=delta.length2();
 					double R=Math.sqrt(R2);
-					Vector2D F0=delta.mul(1f/R); //Á¦Ö¸Ïò±»·ÖÎö¶ÔÏóµÄµ¥Î»ÏòÁ¿
+					Vector2D F0=delta.mul(1f/R); //åŠ›æŒ‡å‘è¢«åˆ†æå¯¹è±¡çš„å•ä½å‘é‡
 
-					Vector2D Fk=F0.mul(k*p.q*cp.q/R2); //¿âÂ×Á¦, Í¬³âÒìÎü
+					Vector2D Fk=F0.mul(k*p.q*cp.q/R2); //åº“ä¼¦åŠ›, åŒæ–¥å¼‚å¸
 					p.force=p.force.add(Fk);
 				}
 			}
@@ -146,20 +146,20 @@ public class World {
 			 ElectricField cE=aE.get(i);
 			 if (cE.Region.isIn(p.position)) {			 
 				 Vector2D cFE=cE.Force(p);
-				 p.force=p.force.add(cFE); //µç³¡Á¦
+				 p.force=p.force.add(cFE); //ç”µåœºåŠ›
 			 }
 		}
 		for(int i=0;i<aB.size();++i) {
 			 Magnetic cB=aB.get(i);
 			 if (cB.Region.isIn(p.position)) {			 
 				 Vector2D cfB=cB.Force(p);
-				 p.force=p.force.add(cfB); //ÂåÂØ×ÈÁ¦
+				 p.force=p.force.add(cfB); //æ´›ä»‘å…¹åŠ›
 			 }
 		}
-		Vector2D FE=E.Force(p); //È«¾Öµç³¡Á¦
-		Vector2D fB=B.Force(p); //È«¾ÖÂåÂØ×ÈÁ¦
+		Vector2D FE=E.Force(p); //å…¨å±€ç”µåœºåŠ›
+		Vector2D fB=B.Force(p); //å…¨å±€æ´›ä»‘å…¹åŠ›
 		p.force=p.force.add(FE).add(fB);
-		p.force=p.force.add(p.velocity.mul(-u)).add(g.mul(p.m)); //¿ÕÆø×èÁ¦¡¢ÖØÁ¦
+		p.force=p.force.add(p.velocity.mul(-u)).add(g.mul(p.m)); //ç©ºæ°”é˜»åŠ›ã€é‡åŠ›
 	}
 	
 	public void calcAcceleration() {
@@ -178,7 +178,7 @@ public class World {
 			 //System.out.println(av);
 			 if (Math.abs(av)>MyMath.zero || p.velocity.length()<=MyMath.zero)  {
 				 p.velocity=p.velocity.add(p.acceleration.mul(dt));
-			 } else { //ÈÏÎªav´¹Ö±, Ö»¸Ä±äËÙ¶È·½Ïò, ·ÀÖ¹¾«¶ÈÎÊÌâµ¼ÖÂËÙ¶ÈÔ½À´Ô½´ó
+			 } else { //è®¤ä¸ºavå‚ç›´, åªæ”¹å˜é€Ÿåº¦æ–¹å‘, é˜²æ­¢ç²¾åº¦é—®é¢˜å¯¼è‡´é€Ÿåº¦è¶Šæ¥è¶Šå¤§
 				 //System.out.println("av");
 				 Vector2D oldv=p.velocity;
 				 p.velocity=p.velocity.add(p.acceleration.mul(dt));
@@ -199,7 +199,7 @@ public class World {
 	
 	public double calcCollision(double dt) {
 		
-		//Ñ°ÕÒ×î½üÒ»´ÎÅö×²
+		//å¯»æ‰¾æœ€è¿‘ä¸€æ¬¡ç¢°æ’
 		boolean hasCollision=false;
 		ArrayList<CollisionInfo> closestCollision=new ArrayList<CollisionInfo>();
 		double closestCollisionTime=dt;
@@ -221,17 +221,17 @@ public class World {
 			 for(int j=0;j<aBoundary.size();++j) {
 				 Line cB=aBoundary.get(j);
 				 IntersectionResult ir=cB.findIntersection(s);
-				 if (ir.type == 0) { //¼ì²âµ½Åö×²
+				 if (ir.type == 0) { //æ£€æµ‹åˆ°ç¢°æ’
 					 System.out.println("Intersection: "+String.valueOf(ir.Intersection));
-					 //ÉÏ´Î¸ÕÔÚÕâÀïÅö¹ı, ¾ÍÌø¹ı
+					 //ä¸Šæ¬¡åˆšåœ¨è¿™é‡Œç¢°è¿‡, å°±è·³è¿‡
 					 if (p.flag && p.lastColl != null && p.lastColl.add(ir.Intersection.mul(-1)).length()<MyMath.zero) {
 						 p.flag=false;
-						 System.out.println("ÉÏ´Î¸ÕÔÚÕâÀïÅö¹ı");
+						 System.out.println("ä¸Šæ¬¡åˆšåœ¨è¿™é‡Œç¢°è¿‡");
 						 continue;
 					 }
 					
 					 Vector2D ns=ir.Intersection.add(p.position.mul(-1));
-					 double time=ns.length()/p.velocity.length(); //´ïµ½Åö×²ËùĞèÊ±¼ä
+					 double time=ns.length()/p.velocity.length(); //è¾¾åˆ°ç¢°æ’æ‰€éœ€æ—¶é—´
 					 System.out.println("time: "+String.valueOf(time));
 					 if (time <= 0.0) {
 						 continue;
@@ -239,15 +239,15 @@ public class World {
 					 if (time > 0.0 && Math.abs(time-closestCollisionTime)<1e-10) {
 						 p.flag=true;
 						 p.lastColl=ir.Intersection;
-						 closestCollision.add(new CollisionInfo(time, p, cB, ir)); //Ìí¼Óµ½±¾´Î·¢ÉúµÄÅö×²
+						 closestCollision.add(new CollisionInfo(time, p, cB, ir)); //æ·»åŠ åˆ°æœ¬æ¬¡å‘ç”Ÿçš„ç¢°æ’
 					 } else if (time < closestCollisionTime) {
 						 p.flag=true;
 						 p.lastColl=ir.Intersection;
 						 if (time > 0.0) {
 							 hasCollision=true;
-							 closestCollisionTime=time; //·¢ÏÖ¸ü¶ÌÊ±¼äÄÚµÄÅö×²
+							 closestCollisionTime=time; //å‘ç°æ›´çŸ­æ—¶é—´å†…çš„ç¢°æ’
 							 closestCollision.clear();
-							 closestCollision.add(new CollisionInfo(time, p, cB, ir)); //Ìí¼Óµ½±¾´Î·¢ÉúµÄÅö×²
+							 closestCollision.add(new CollisionInfo(time, p, cB, ir)); //æ·»åŠ åˆ°æœ¬æ¬¡å‘ç”Ÿçš„ç¢°æ’
 						 }
 					 }
 				 } /*else {
@@ -266,7 +266,7 @@ public class World {
 		if (hasCollision /* && mint>0*/) {
 			System.out.println(1);
 			System.out.println("size: "+String.valueOf(closestCollision.size()));
-			//Åö×²Ç°
+			//ç¢°æ’å‰
 			for(int i=0;i<closestCollision.size();++i) {
 				System.out.println("set enableColl=false");
 				closestCollision.get(i).p.enableColl = false;
@@ -275,21 +275,21 @@ public class World {
 				System.out.println("minp.enableColl=false");
 				minp.enableColl=false;
 			}*/
-			//µü´ú
+			//è¿­ä»£
 			next(closestCollisionTime, true);
-			//Åö×²ºó
+			//ç¢°æ’å
 			for(int i=0;i<closestCollision.size();++i) {
 				CollisionInfo ci=closestCollision.get(i);
 				System.out.println("Vbefore: "+String.valueOf(ci.p.velocity));
-				//·´µ¯
-				ci.p.velocity=ci.boundary.getSymmetry(ci.p.velocity).mul(ci.boundary.k);//Åö×²ºó
+				//åå¼¹
+				ci.p.velocity=ci.boundary.getSymmetry(ci.p.velocity).mul(ci.boundary.k);//ç¢°æ’å
 				System.out.println("Vafter: "+String.valueOf(ci.p.velocity));
 				
 				System.out.println("set enableColl=true");
 				ci.p.enableColl = true;
 			}
 			
-		/*} else if (hasCollision && mint<=0) { //Åö×²Ê±
+		/*} else if (hasCollision && mint<=0) { //ç¢°æ’æ—¶
 			System.out.println(2);
 			//mint=1e-18d;
 			//next(mint, false);*/

@@ -7,7 +7,7 @@ public class Line {
 	
 	double A,B,C;
 	
-	public double k=1.0; //»Ö¸´ÏµÊı 
+	public double k=1.0; //æ¢å¤ç³»æ•° 
 	
 	public Line(Vector2D p0, Vector2D p1) {
 		this.p0=p0;
@@ -28,7 +28,7 @@ public class Line {
 	}
 	
 	/**
-	 * ·µ»Ø×ÖÃæÖµ
+	 * è¿”å›å­—é¢å€¼
 	 */
 	public String toString()
 	{
@@ -37,20 +37,20 @@ public class Line {
 	}
 	
 	/**
-	 * Çó½»µã
-	 * @param b ÁíÍâÒ»ÌõÏß¶Î
-	 * @return ½»µãĞÅÏ¢
+	 * æ±‚äº¤ç‚¹
+	 * @param b å¦å¤–ä¸€æ¡çº¿æ®µ
+	 * @return äº¤ç‚¹ä¿¡æ¯
 	 */
 	public IntersectionResult findIntersection(Line b) {
 		IntersectionResult result=new IntersectionResult();
-		if (!rect.isCoincide(b.rect)) { //ÎŞ½»µã
+		if (!rect.isCoincide(b.rect)) { //æ— äº¤ç‚¹
 			result.type=-1;
 			return result;
 		}
 		Equation2Val equ=new Equation2Val(A,B,C,b.A,b.B,b.C);
 		Solution sol=equ.getSolution();
 		if (sol.Solution != null) {
-			if (!rect.isIn((sol.Solution)) || !b.rect.isIn((sol.Solution))) { //½»µãÔÚÏß¶ÎÍâÃæ
+			if (!rect.isIn((sol.Solution)) || !b.rect.isIn((sol.Solution))) { //äº¤ç‚¹åœ¨çº¿æ®µå¤–é¢
 				sol.type=-1;
 			}
 		}
@@ -64,16 +64,16 @@ public class Line {
 		double b1=C*b.A-A*b.C; //C1A2-A1C2
 		double k2=-k1; //A1B2-A2B1
 		double b2=C*b.B-B*b.C; //C1B2-B1C2
-		if (Math.abs(k1)<MyMath.zero) { //Æ½ĞĞ
-			if (Math.abs(b1)<MyMath.zero||Math.abs(b2)<MyMath.zero) { //Ö±ÏßÖØºÏ
+		if (Math.abs(k1)<MyMath.zero) { //å¹³è¡Œ
+			if (Math.abs(b1)<MyMath.zero||Math.abs(b2)<MyMath.zero) { //ç›´çº¿é‡åˆ
 				result.type=1;
-			} else { //Æ½ĞĞÎŞ½»µã
+			} else { //å¹³è¡Œæ— äº¤ç‚¹
 				result.type=-1;
 			}
 		} else {
 			//y=-b1/k1, x=-b2/k2
 			result.Intersection=new Vector2D(-b2/k2, -b1/k1);
-			if (!rect.isIn((result.Intersection)) || !b.rect.isIn((result.Intersection))) { //½»µãÔÚÏß¶ÎÍâÃæ
+			if (!rect.isIn((result.Intersection)) || !b.rect.isIn((result.Intersection))) { //äº¤ç‚¹åœ¨çº¿æ®µå¤–é¢
 				result.type=-1;
 			}
 		}*/
@@ -81,17 +81,17 @@ public class Line {
 	}
 	
 	/**
-	 * ·½ÏòÏòÁ¿
-	 * @return ·½ÏòÏòÁ¿
+	 * æ–¹å‘å‘é‡
+	 * @return æ–¹å‘å‘é‡
 	 */
 	public Vector2D getDirection() {
 		return new Vector2D(-B,A);
 	}
 	
 	/**
-	 * ¶Ô³Æµã
-	 * @param p µã
-	 * @return ¶Ô³Æµã
+	 * å¯¹ç§°ç‚¹
+	 * @param p ç‚¹
+	 * @return å¯¹ç§°ç‚¹
 	 */
 	public Vector2D getSymmetry(Vector2D p) {
 		Vector2D dir=getDirection();

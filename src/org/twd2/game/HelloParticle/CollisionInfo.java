@@ -1,7 +1,7 @@
 package org.twd2.game.HelloParticle;
 
 /**
- * 用来存储一组碰撞的信息
+ * 鐢ㄦ潵瀛樺偍涓�缁勭鎾炵殑淇℃伅
  * @author twd2
  *
  */

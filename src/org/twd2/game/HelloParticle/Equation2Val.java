@@ -20,10 +20,10 @@ public class Equation2Val {
 		double b1=C1*A2-A1*C2; //C1A2-A1C2
 		double k2=-k1; //A1B2-A2B1
 		double b2=C1*B2-B1*C2; //C1B2-B1C2
-		if (Math.abs(k1)<1e-8) { //Æ½ÐÐ
-			if (Math.abs(b1)<1e-8||Math.abs(b2)<1e-8) { //Ö±ÏßÖØºÏ
+		if (Math.abs(k1)<1e-8) { //å¹³è¡Œ
+			if (Math.abs(b1)<1e-8||Math.abs(b2)<1e-8) { //ç›´çº¿é‡åˆ
 				result.type=1;
-			} else { //Æ½ÐÐÎÞ½»µã
+			} else { //å¹³è¡Œæ— äº¤ç‚¹
 				result.type=-1;
 			}
 		} else {

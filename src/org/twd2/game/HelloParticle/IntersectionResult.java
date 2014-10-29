@@ -3,6 +3,6 @@ package org.twd2.game.HelloParticle;
 public class IntersectionResult {
 
 	public Vector2D Intersection;
-	public int type=0; //0: Õı³£, 1: Ïß¶ÎÖØºÏ, -1: ÎŞ½»µã 
+	public int type=0; //0: æ­£å¸¸, 1: çº¿æ®µé‡åˆ, -1: æ— äº¤ç‚¹ 
 	
 }

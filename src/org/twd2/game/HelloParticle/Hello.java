@@ -47,20 +47,20 @@ public class Hello {
 	
 	public void printInfo() {
 		StringBuffer sb = new StringBuffer();
-		sb.append("Íò´ôµÄHelloParticle\r\n");
-		sb.append("ºìÉ«¿ò: µç³¡, ÂÌÉ«¿ò: ´Å³¡\r\n");
-		sb.append("²Ù×÷ËµÃ÷: \r\n");
-		sb.append("\tEsc\tÍË³ö\r\n");
-		sb.append("\t0\tÖØÖÃ×ø±êÔ­µã\r\n");
-		sb.append("\tF\tÇĞ»»È«ÆÁÄ£Ê½\r\n");
-		sb.append("\tS\tÇĞ»»ÊÇ·ñÆµÉÁÕÕÆ¬\r\n");
-		sb.append("\tV\tÇĞ»»ÊÇ·ñäÖÈ¾ËÙ¶È\r\n");
-		sb.append("\tZ\tÖØÖÃËõ·Å±ÈÀı\r\n");
-		sb.append("\t¡ü\t»­²¼ÏòÏÂÒÆ¶¯\r\n");
-		sb.append("\t¡ı\t»­²¼ÏòÉÏÒÆ¶¯\r\n");
-		sb.append("\t¡û\t»­²¼ÏòÓÒÒÆ¶¯\r\n");
-		sb.append("\t¡ú\t»­²¼Ïò×óÒÆ¶¯\r\n");
-		sb.append("\tÊó±ê¹öÂÖ\t·Å´ó»òËõĞ¡\r\n");
+		sb.append("ä¸‡å‘†çš„HelloParticle\r\n");
+		sb.append("çº¢è‰²æ¡†: ç”µåœº, ç»¿è‰²æ¡†: ç£åœº\r\n");
+		sb.append("æ“ä½œè¯´æ˜: \r\n");
+		sb.append("\tEsc\té€€å‡º\r\n");
+		sb.append("\t0\té‡ç½®åæ ‡åŸç‚¹\r\n");
+		sb.append("\tF\tåˆ‡æ¢å…¨å±æ¨¡å¼\r\n");
+		sb.append("\tS\tåˆ‡æ¢æ˜¯å¦é¢‘é—ªç…§ç‰‡\r\n");
+		sb.append("\tV\tåˆ‡æ¢æ˜¯å¦æ¸²æŸ“é€Ÿåº¦\r\n");
+		sb.append("\tZ\té‡ç½®ç¼©æ”¾æ¯”ä¾‹\r\n");
+		sb.append("\tâ†‘\tç”»å¸ƒå‘ä¸‹ç§»åŠ¨\r\n");
+		sb.append("\tâ†“\tç”»å¸ƒå‘ä¸Šç§»åŠ¨\r\n");
+		sb.append("\tâ†\tç”»å¸ƒå‘å³ç§»åŠ¨\r\n");
+		sb.append("\tâ†’\tç”»å¸ƒå‘å·¦ç§»åŠ¨\r\n");
+		sb.append("\té¼ æ ‡æ»šè½®\tæ”¾å¤§æˆ–ç¼©å°\r\n");
 		System.out.println(sb.toString());
 	}
 
@@ -74,7 +74,7 @@ public class Hello {
 			//Display.setIcon(IconLoader.load(ins));
 			Display.create();
 		} catch (Exception e) {
-			// TODO ×Ô¶¯Éú³ÉµÄ catch ¿é
+			// TODO è‡ªåŠ¨ç”Ÿæˆçš„ catch å—
 			e.printStackTrace();
 		}
 		initWorld();
@@ -149,8 +149,8 @@ public class Hello {
 		glPointSize(5);  
 		glLineWidth(2);  
 		glEnable(GL_POINT_SMOOTH);
-		glEnable(GL_LINE_SMOOTH);        //Ïß¿¹¾â³İ  
-		glEnable(GL_POLYGON_SMOOTH);     //¶à±ßĞÎ¿¹¾â³İ 
+		glEnable(GL_LINE_SMOOTH);        //çº¿æŠ—é”¯é½¿  
+		glEnable(GL_POLYGON_SMOOTH);     //å¤šè¾¹å½¢æŠ—é”¯é½¿ 
 		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST); // Make round points, not square points  
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);  // Antialias the lines 
 		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST); 
@@ -192,11 +192,11 @@ public class Hello {
 			clearGL();
 		
 		glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
-		//Ô­µã
+		//åŸç‚¹
 		glBegin(GL_POINTS);
 		glVertex2f((float)offset.x*pxpercm*zoom + 0*pxpercm*zoom, (float)offset.y*pxpercm*zoom + 0*pxpercm*zoom);
 		glEnd();
-		//×ø±êÖá
+		//åæ ‡è½´
 		glBegin(GL_LINES);
 		
 		//x
@@ -371,7 +371,7 @@ public class Hello {
 		        	zoom=1f;
 		        	clearGL();
 		        } else if (Keyboard.getEventKey() == Keyboard.KEY_ESCAPE) {
-		        	System.out.println("ÓÃ»§°´ÏÂÁËesc");
+		        	System.out.println("ç”¨æˆ·æŒ‰ä¸‹äº†esc");
 		        	System.exit(0);
 		        } else if (Keyboard.getEventKey() == Keyboard.KEY_F) {
 		        	setDisplayMode(WIDTH, HEIGHT, !Display.isFullscreen());
@@ -489,21 +489,21 @@ public class Hello {
 	
 	private boolean lastMouseState=false; 
 	public void onMouseDrag(boolean buttonDown) {
-		//´ÓÃ»ÓĞ°´ÏÂµ½°´ÏÂ
+		//ä»æ²¡æœ‰æŒ‰ä¸‹åˆ°æŒ‰ä¸‹
 		if (!lastMouseState && buttonDown) {
 			mousep.enable=true;
-			//System.out.println("ÓÃ»§°´ÏÂÁËÊó±ê");
+			//System.out.println("ç”¨æˆ·æŒ‰ä¸‹äº†é¼ æ ‡");
 		}
 		if(buttonDown) {
-			//´¦ÀíÊó±êÒÆ¶¯
+			//å¤„ç†é¼ æ ‡ç§»åŠ¨
 			mousep.velocity=Vector2D.zero;
 			mousep.position=new Vector2D((double)Mouse.getX()/pxpercm/zoom-offset.x,(double)Mouse.getY()/pxpercm/zoom-offset.y);
 			//System.out.println(mousep.postion);
 		}
-		//´Ó°´ÏÂµ½Ã»ÓĞ°´ÏÂ
+		//ä»æŒ‰ä¸‹åˆ°æ²¡æœ‰æŒ‰ä¸‹
 		if (lastMouseState && !buttonDown) {
 			mousep.enable=false;
-			//System.out.println("ÓÃ»§ËÉ¿ªÁËÊó±ê");
+			//System.out.println("ç”¨æˆ·æ¾å¼€äº†é¼ æ ‡");
 		}
 		
 		lastMouseState=buttonDown;

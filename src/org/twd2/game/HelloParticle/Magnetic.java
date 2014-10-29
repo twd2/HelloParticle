@@ -2,8 +2,8 @@ package org.twd2.game.HelloParticle;
 
 public class Magnetic {
 
-	boolean Direction=true; //true: ´¹Ö±ÆÁÄ»ÏòÍâ, false: ´¹Ö±ÆÁÄ»ÏòÀï
-	double B=0; //´Å¸ĞÓ¦Ç¿¶È
+	boolean Direction=true; //true: å‚ç›´å±å¹•å‘å¤–, false: å‚ç›´å±å¹•å‘é‡Œ
+	double B=0; //ç£æ„Ÿåº”å¼ºåº¦
 	public Rect Region;
 	
 	public Vector2D Force(Particle p) {
@@ -11,11 +11,11 @@ public class Magnetic {
 			return Vector2D.zero;
 		}
 		Vector2D fB;
-		if (Direction) { //´¹Ö±ÆÁÄ»ÏòÍâ
-			Vector2D F0=p.velocity.rotateNegative90().unit(); //Á¦µÄµ¥Î»ÏòÁ¿
+		if (Direction) { //å‚ç›´å±å¹•å‘å¤–
+			Vector2D F0=p.velocity.rotateNegative90().unit(); //åŠ›çš„å•ä½å‘é‡
 			fB=F0.mul(p.q*p.velocity.length()*B);
-		} else { //´¹Ö±ÆÁÄ»ÏòÀï
-			Vector2D F0=p.velocity.rotatePositive90().unit(); //Á¦µÄµ¥Î»ÏòÁ¿
+		} else { //å‚ç›´å±å¹•å‘é‡Œ
+			Vector2D F0=p.velocity.rotatePositive90().unit(); //åŠ›çš„å•ä½å‘é‡
 			fB=F0.mul(p.q*p.velocity.length()*B);
 		}
 		return fB;
