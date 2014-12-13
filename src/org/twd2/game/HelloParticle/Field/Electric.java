@@ -3,7 +3,7 @@ package org.twd2.game.HelloParticle.Field;
 import org.twd2.game.HelloParticle.Math.Vector2D;
 import org.twd2.game.HelloParticle.Physics.Particle;
 
-public class ElectricField extends Field {
+public class Electric extends Field {
 
 	public Vector2D value=Vector2D.zero;
 	

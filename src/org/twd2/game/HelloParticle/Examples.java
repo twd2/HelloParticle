@@ -1,6 +1,6 @@
 package org.twd2.game.HelloParticle;
 
-import org.twd2.game.HelloParticle.Field.ElectricField;
+import org.twd2.game.HelloParticle.Field.Electric;
 import org.twd2.game.HelloParticle.Field.Magnetic;
 import org.twd2.game.HelloParticle.Math.Line;
 import org.twd2.game.HelloParticle.Math.Vector2D;
@@ -49,7 +49,7 @@ public class Examples {
 		b.value=1e20d;
 		world.addField(b);
 		
-		ElectricField e=new ElectricField();
+		Electric e=new Electric();
 		e.Region=new Rectangle(-9,-9,9,9);
 		e.value=new Vector2D(0f,1e18f);
 		world.addField(e);
@@ -89,7 +89,7 @@ public class Examples {
 		world.enableGravity=false;
 		world.enableCoulombForce=false;
 
-		ElectricField e=new ElectricField();
+		Electric e=new Electric();
 		e.Region=new Rectangle(-100,10,100,0.5);
 		e.value=new Vector2D(0,-1e16d);
 		//world.addField(e);
@@ -122,10 +122,10 @@ public class Examples {
 	 * @param world
 	 */
 	public static void ex4(World world) {
-		//world.enableGravity=false;
+		world.enableGravity=false;
 		world.enableCoulombForce=false;
 
-		ElectricField e=new ElectricField();
+		Electric e=new Electric();
 		e.Region=new Rectangle(-10,-10,100,10);
 		e.value=new Vector2D(0,-50d);
 		world.addField(e);

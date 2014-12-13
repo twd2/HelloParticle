@@ -6,7 +6,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.twd2.game.HelloParticle.Field.ElectricField;
+import org.twd2.game.HelloParticle.Field.Electric;
 import org.twd2.game.HelloParticle.Field.Field;
 import org.twd2.game.HelloParticle.Field.Magnetic;
 import org.twd2.game.HelloParticle.Math.Line;
@@ -158,7 +158,7 @@ public class Renderer {
 		for(int i=0;i<world.fields.size();++i) {
 			Field cf=world.fields.get(i);
 			
-			if (cf instanceof ElectricField) {
+			if (cf instanceof Electric) {
 				glColor4f(1f, 0.5f, 0.5f, 0.5f);
 				renderShape(cf.Region);
 			} else if (cf instanceof Magnetic) {

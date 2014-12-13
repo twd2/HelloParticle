@@ -2,7 +2,7 @@ package org.twd2.game.HelloParticle.Physics;
 
 import java.util.ArrayList;
 
-import org.twd2.game.HelloParticle.Field.ElectricField;
+import org.twd2.game.HelloParticle.Field.Electric;
 import org.twd2.game.HelloParticle.Field.Field;
 import org.twd2.game.HelloParticle.Field.Gravity;
 import org.twd2.game.HelloParticle.Field.Magnetic;
