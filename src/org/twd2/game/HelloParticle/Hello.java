@@ -12,6 +12,16 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.twd2.game.HelloParticle.Field.ElectricField;
+import org.twd2.game.HelloParticle.Field.Field;
+import org.twd2.game.HelloParticle.Field.Magnetic;
+import org.twd2.game.HelloParticle.Math.Line;
+import org.twd2.game.HelloParticle.Math.Vector2D;
+import org.twd2.game.HelloParticle.Physics.Particle;
+import org.twd2.game.HelloParticle.Physics.World;
+import org.twd2.game.HelloParticle.Shape.Circle;
+import org.twd2.game.HelloParticle.Shape.Rectangle;
+import org.twd2.game.HelloParticle.Shape.Shape;
 
 
 public class Hello {
@@ -83,64 +93,10 @@ public class Hello {
 	}
 
 	public void initWorld() {
-		//world.g=Vector2D.zero;
 		mousep.enable=false;
 		//mousep.q=1000d;
 		world.addParticle(mousep);
-		//world.B.Direction=false;
-		//world.B.B=1d;
-		
-		Magnetic b=new Magnetic();
-		b.Region=new Rect(-5,-5,5,5);
-		b.Direction=false;
-		b.B=1e20d;
-		world.addMagnetic(b);
-		
-		ElectricField e=new ElectricField();
-		e.Region=new Rect(-9,-9,9,9);
-		e.E=new Vector2D(0f,1e18f);
-		world.addElectricField(e);
-		//world.E=new Vector2D(0,1f);
-		
-		Line ln=new Line(-100,1,100,1);
-		ln.k=0d;
-		world.addBoundary(ln);
-		
-		Rect r1=new Rect(-10,-10,10,10);
-		world.addBoundary(r1);
-		
-		Rect r2=new Rect(-20,-20,20,20);
-		world.addBoundary(r2);
-		
-		Line l1=new Line(-10,-10,10,10);
-		l1.k=0.5d;
-		world.addBoundary(l1);
-		
-		Line l2=new Line(-10,10,10,-10);
-		l2.k=0.5d;
-		world.addBoundary(l2);
-		
-		Particle p0=new Particle(1e-10d,new Vector2D(1,0));
-		p0.velocity=new Vector2D(0d,2d);
-		//p0.q=1e-20f;
-		//world.addParticle(p0);
-		
-		
-		for(int i=4;i<=4;++i) {
-			Particle p1=new Particle(1d,new Vector2D(-10+(double)i,5));//new Particle(1d,new Vector2D(-10+20*Math.random(),-10+20*Math.random()));
-			p1.velocity=new Vector2D(1d,0d);
-			p1.q=Math.random()*1e-16;
-			world.addParticle(p1);
-		}
-		
-		//Particle p2=new Particle(100d,new Vector2D(20,0));
-		//world.addParticle(p2);
-		/*for(int i=1;i<=2;++i) {
-			Particle p0=new Particle(100000000000f,new Vector2D(i+10,1));
-			p0.velocity=new Vector2D(0,i);
-			//p0.q=0.001f*i;
-			world.addParticle(p0);
-		}*/
+		Examples.ex4(world);
 	}
     
 	public void initGL() {
@@ -218,8 +174,7 @@ public class Hello {
 		
 		glEnd();
 				
-		renderB();
-		renderE();
+		renderFields();
 		renderBoundary();
 		renderWorld();
 		//renderVector(Vector2D.makeNew(10, 45f/180f*(float)Math.PI));
@@ -229,8 +184,36 @@ public class Hello {
 		glFlush();
 	}
 	
-	public void renderB() {
-		if (world.B.B!=0.0) {
+	public void renderFields() {
+		for(int i=0;i<world.fields.size();++i) {
+			Field cf=world.fields.get(i);
+			
+			if (cf instanceof ElectricField) {
+				renderE((ElectricField)cf);
+			} else if (cf instanceof Magnetic) {
+				renderB((Magnetic)cf);
+			} else {
+				
+			}
+			
+			/*Shape r=cf.Region;
+			glColor4f(0.5f, 1f, 0.5f, 0.5f);
+			renderShape(r);*/
+		}
+	}
+	
+	public void renderB(Magnetic b) {
+		glColor4f(0.5f, 1f, 0.5f, 0.5f);
+		renderShape(b.Region);
+	}
+	
+	public void renderE(ElectricField e) {
+		glColor4f(1f, 0.5f, 0.5f, 0.5f);
+		renderShape(e.Region);
+	}
+	
+	/*public void renderB() {
+		if (world.B.value!=0.0) {
 			glPointSize(1);  
 			glLineWidth(1); 
 			glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
@@ -257,24 +240,24 @@ public class Hello {
 		}
 		for(int i=0;i<world.aB.size();++i) {
 			Magnetic cB=world.aB.get(i);
-			Rect r=cB.Region;
+			Shape r=cB.Region;
 			glColor4f(0.5f, 1f, 0.5f, 0.5f);
-			renderRect(r);
+			renderShape(r);
 		}
 	}
 	
 	public void renderE() {
 		for(int i=0;i<world.aE.size();++i) {
 			ElectricField cE=world.aE.get(i);
-			Rect r=cE.Region;
+			Shape r=cE.Region;
 			glColor4f(1f, 0.5f, 0.5f, 0.5f);
-			renderRect(r);
+			renderShape(r);
 		}
-	}
+	}*/
 	
 	public void renderBoundary() {
-		for(int i=0;i<world.aBoundary.size();++i) {
-			Line cB=world.aBoundary.get(i);
+		for(int i=0;i<world.boundaries.size();++i) {
+			Line cB=world.boundaries.get(i);
 			glColor4f(0f, 1f, 1f, 0.5f);
 			glBegin(GL_LINES);
 			glVertex2f((float)(offset.x*pxpercm*zoom + cB.p0.x*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + cB.p0.y*pxpercm*zoom));
@@ -283,7 +266,15 @@ public class Hello {
 		}
 	}
 	
-	public void renderRect(Rect r) {
+	public void renderShape(Shape r) {
+		if (r instanceof Rectangle) {
+			renderRect((Rectangle)r);
+		} else if (r instanceof Circle) {
+			renderCircle((Circle)r);
+		}
+	}
+	
+	public void renderRect(Rectangle r) {
 		glBegin(GL_LINES);
 		glVertex2f((float)(offset.x*pxpercm*zoom + r.x0*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y0*pxpercm*zoom));
 		glVertex2f((float)(offset.x*pxpercm*zoom + r.x0*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y1*pxpercm*zoom));
@@ -296,12 +287,36 @@ public class Hello {
 		glEnd();
 	}
 	
+	public void renderCircle(Circle r) {
+		glBegin(GL_LINES);
+		double di=Math.PI/400;
+		double lastx=r.centre.x+r.radius;
+		double lasty=r.centre.y;
+		for(double i=0;i<2*Math.PI;i+=di) {
+			glVertex2f((float)(offset.x*pxpercm*zoom + lastx*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + lasty*pxpercm*zoom));
+			lastx=r.centre.x+r.radius*Math.cos(i);
+			lasty=r.centre.y+r.radius*Math.sin(i);
+			glVertex2f((float)(offset.x*pxpercm*zoom + lastx*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + lasty*pxpercm*zoom));
+		}
+		//TODO: 
+		/*glVertex2f((float)(offset.x*pxpercm*zoom + r.x0*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y0*pxpercm*zoom));
+		glVertex2f((float)(offset.x*pxpercm*zoom + r.x0*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y1*pxpercm*zoom));
+		glVertex2f((float)(offset.x*pxpercm*zoom + r.x0*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y1*pxpercm*zoom));
+		glVertex2f((float)(offset.x*pxpercm*zoom + r.x1*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y1*pxpercm*zoom));
+		glVertex2f((float)(offset.x*pxpercm*zoom + r.x1*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y1*pxpercm*zoom));
+		glVertex2f((float)(offset.x*pxpercm*zoom + r.x1*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y0*pxpercm*zoom));
+		glVertex2f((float)(offset.x*pxpercm*zoom + r.x1*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y0*pxpercm*zoom));
+		glVertex2f((float)(offset.x*pxpercm*zoom + r.x0*pxpercm*zoom), (float)(offset.y*pxpercm*zoom + r.y0*pxpercm*zoom));
+		*/
+		glEnd();
+	}
+	
 	public void renderWorld() {
 		glPointSize(5);  
 		glLineWidth(2); 
 		glColor4f(0.5f, 0.5f, 1f, 1f);
-		for(int i=0;i<world.ap.size();++i) {
-			Particle p=world.ap.get(i);
+		for(int i=0;i<world.particles.size();++i) {
+			Particle p=world.particles.get(i);
 			if (!p.enable) continue;
 			renderParticle(p);
 		}
