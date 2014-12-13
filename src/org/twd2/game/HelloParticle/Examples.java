@@ -122,7 +122,7 @@ public class Examples {
 	 * @param world
 	 */
 	public static void ex4(World world) {
-		world.enableGravity=false;
+		//world.enableGravity=false;
 		world.enableCoulombForce=false;
 
 		ElectricField e=new ElectricField();
