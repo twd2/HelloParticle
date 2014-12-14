@@ -7,7 +7,13 @@ public class Electric extends Field {
 
 	public Vector2D value=Vector2D.zero;
 	
-	//public Shape Region;
+	public Electric(Vector2D value) {
+		this.value=value;
+	}
+	
+	public Electric(double x, double y) {
+		this.value=new Vector2D(x,y);
+	}
 	
 	@Override
 	public Vector2D Force(Particle p) {

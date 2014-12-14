@@ -6,6 +6,7 @@ import org.twd2.game.HelloParticle.Field.Electric;
 import org.twd2.game.HelloParticle.Field.Field;
 import org.twd2.game.HelloParticle.Field.Gravity;
 import org.twd2.game.HelloParticle.Field.Magnetic;
+import org.twd2.game.HelloParticle.Joint.Joint;
 import org.twd2.game.HelloParticle.Math.Line;
 import org.twd2.game.HelloParticle.Math.MyMath;
 import org.twd2.game.HelloParticle.Math.Vector2D;
@@ -31,6 +32,7 @@ public class World {
 	
 	public ArrayList<Particle> particles=new ArrayList<Particle>();
 	public ArrayList<Field> fields=new ArrayList<Field>();
+	public ArrayList<Joint> joints=new ArrayList<Joint>();
 	
 	//public ArrayList<Magnetic> aB=new ArrayList<Magnetic>();
 	//public ArrayList<ElectricField> aE=new ArrayList<ElectricField>();
@@ -57,6 +59,10 @@ public class World {
 		fields.add(f);
 	}
 	
+	public void addJoint(Joint j) {
+		joints.add(j);
+	}
+	
 	public void addBoundary(Line b) {
 		boundaries.add(b);
 	}
@@ -80,6 +86,7 @@ public class World {
 		double ddt=dt/iter;
 		for(int i=0;i<iter;++i)
 			next(ddt, collision);
+		clearUserForce();
 	}
 	
 	public void next(double dt) {
@@ -102,16 +109,30 @@ public class World {
 		}
 	}
 	
-	public void calcForce() {
+	public void clearUserForce() {
 		for(int i=0;i<particles.size();++i) {
 			Particle p=particles.get(i);
-			if (!p.enable) continue;
-			 calcParticleForce(p);
+			p.userForce=Vector2D.zero;
 		}  
 	}
 	
+	public void calcForce() {
+		for(int i=0;i<particles.size();++i) {
+			Particle p=particles.get(i);
+			if (!p.enable || p.fixed) continue;
+			 calcParticleForce(p);
+		}
+		
+		//全部的连接
+		for(int i=0;i<joints.size();++i) {
+			Joint j=joints.get(i);
+			j.Force();
+		}
+	}
+	
 	public void calcParticleForce(Particle p) {
-		p.force=Vector2D.zero;
+		p.force=p.userForce;
+		//p.userForce=Vector2D.zero;
 		
 		if (enableGravity || enableCoulombForce) {
 			if (enableGravity && enableCoulombForce) {
@@ -161,8 +182,7 @@ public class World {
 				}
 			}
 		}
-		//TODO
-		
+
 		//全部的场
 		for(int i=0;i<fields.size();++i) {
 			 Field f=fields.get(i);
@@ -171,33 +191,12 @@ public class World {
 				 p.force=p.force.add(force);
 			 }
 		}
-		
-		/*for(int i=0;i<aE.size();++i) {
-			 ElectricField cE=aE.get(i);
-			 if (cE.Region.isIn(p.position)) {			 
-				 Vector2D cFE=cE.Force(p);
-				 p.force=p.force.add(cFE); //电场力
-			 }
-		}
-		for(int i=0;i<aB.size();++i) {
-			 Magnetic cB=aB.get(i);
-			 if (cB.Region.isIn(p.position)) {			 
-				 Vector2D cfB=cB.Force(p);
-				 p.force=p.force.add(cfB); //洛仑兹力
-			 }
-		}
-		
-		Vector2D FE=E.Force(p); //全局电场力
-		Vector2D fB=B.Force(p); //全局洛仑兹力
-		p.force=p.force.add(FE).add(fB);
-		p.force=p.force.add(p.velocity.mul(-u)).add(g.mul(p.m)); //空气阻力、重力
-		*/
 	}
 	
 	public void calcAcceleration() {
 		for(int i=0;i<particles.size();++i) {
 			 Particle p=particles.get(i);
-			 if (!p.enable) continue;
+			 if (!p.enable || p.fixed) continue;
 			 p.acceleration=p.force.mul(1f/p.m); //a=F/m
 		}
 	}
@@ -208,10 +207,9 @@ public class World {
 			 if (!p.enable) continue;
 			 double av=p.velocity.DotP(p.acceleration);
 			 //System.out.println(av);
-			 if (Math.abs(av)>MyMath.zero || p.velocity.length()<=MyMath.zero)  {
+			 if (Math.abs(av)>1e-8 || p.velocity.length()<=MyMath.zero)  {
 				 p.velocity=p.velocity.add(p.acceleration.mul(dt));
 			 } else { //认为av垂直, 只改变速度方向, 防止精度问题导致速度越来越大
-				 //System.out.println("av");
 				 Vector2D oldv=p.velocity;
 				 p.velocity=p.velocity.add(p.acceleration.mul(dt));
 				 //System.out.println(oldv.length());

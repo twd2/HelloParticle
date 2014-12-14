@@ -57,9 +57,10 @@ public class Hello {
 
 	public void initWorld() {
 		mouseParticle.enable=false;
-		//mousep.q=1000d;
+		mouseParticle.fixed=true;
+		//mouseParticle.q=1000d;
 		world.addParticle(mouseParticle);
-		Examples.ex4(world);
+		Examples.ex9(world);
 	}
     
 	public void start() {

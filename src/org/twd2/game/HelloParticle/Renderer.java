@@ -9,13 +9,19 @@ import org.lwjgl.opengl.DisplayMode;
 import org.twd2.game.HelloParticle.Field.Electric;
 import org.twd2.game.HelloParticle.Field.Field;
 import org.twd2.game.HelloParticle.Field.Magnetic;
+import org.twd2.game.HelloParticle.Field.Block;
+import org.twd2.game.HelloParticle.Joint.Joint;
 import org.twd2.game.HelloParticle.Math.Line;
 import org.twd2.game.HelloParticle.Math.Vector2D;
 import org.twd2.game.HelloParticle.Physics.Particle;
 import org.twd2.game.HelloParticle.Physics.World;
+import org.twd2.game.HelloParticle.Shape.AndShape;
 import org.twd2.game.HelloParticle.Shape.Circle;
+import org.twd2.game.HelloParticle.Shape.NotShape;
+import org.twd2.game.HelloParticle.Shape.OrShape;
 import org.twd2.game.HelloParticle.Shape.Rectangle;
 import org.twd2.game.HelloParticle.Shape.Shape;
+import org.twd2.game.HelloParticle.Shape.XorShape;
 
 public class Renderer {
 	
@@ -30,6 +36,10 @@ public class Renderer {
 	
 	private Vector2D offset=new Vector2D(10,10);
 	private Vector2D zoomedOffset=new Vector2D(10,10);
+	
+	public boolean renderParticleAsDot=false;	
+	
+	private boolean internalRenderParticleAsDot=false;
 	
 	public /*final static*/ boolean strobePhoto=true;
 	
@@ -52,6 +62,11 @@ public class Renderer {
 	private void updateZoom() {
 		zoomwithpxPerUnit=pxPerUnit*getZoom();
 		zoomedOffset=getOffset().mul(zoomwithpxPerUnit);
+		if (zoom<1) {
+			internalRenderParticleAsDot=true;
+		} else {
+			internalRenderParticleAsDot=renderParticleAsDot;
+		}
 	}
 	
 	private void internalInit() {
@@ -85,7 +100,7 @@ public class Renderer {
 		glEnable(GL_POLYGON_SMOOTH);     //多边形抗锯齿 
 		glHint(GL_POINT_SMOOTH_HINT, GL_NICEST); // Make round points, not square points  
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);  // Antialias the lines 
-		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST); 
+		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 		glEnable(GL_BLEND);  
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 		//glMatrixMode(GL_PROJECTION);
@@ -147,10 +162,9 @@ public class Renderer {
 		renderFields();
 		renderBoundary();
 		renderWorld();
+		renderJoint();
 		//renderVector(Vector2D.makeNew(10, 45f/180f*(float)Math.PI));
-		
-		
-		
+
 		glFlush();
 	}
 	
@@ -164,68 +178,26 @@ public class Renderer {
 			} else if (cf instanceof Magnetic) {
 				glColor4f(0.5f, 1f, 0.5f, 0.5f);
 				renderShape(cf.Region);
+			} else if(cf instanceof Block) {
+				glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
+				renderShape(cf.Region);
 			} else {
 				
 			}
-			
-			/*Shape r=cf.Region;
-			glColor4f(0.5f, 1f, 0.5f, 0.5f);
-			renderShape(r);*/
 		}
 	}
 	
-	/*public void renderB(Magnetic b) {
-		glColor4f(0.5f, 1f, 0.5f, 0.5f);
-		renderShape(b.Region);
-	}
-	
-	public void renderE(ElectricField e) {
-		glColor4f(1f, 0.5f, 0.5f, 0.5f);
-		renderShape(e.Region);
-	}
-	
-	public void renderB() {
-		if (world.B.value!=0.0) {
-			glPointSize(1);  
-			glLineWidth(1); 
-			glColor4f(0.5f, 0.5f, 0.5f, 0.5f);
-			if (world.B.Direction) { //.
-				glBegin(GL_POINTS);
-				for (int y=0;y<=100;++y) {
-					for (int x=0;x<=100;++x) {
-						glVertex2f(x*pxpercm, y*pxpercm);
-					}
-				}
-				glEnd();
-			} else { //x
-				glBegin(GL_LINES);
-				for (int y=0;y<=100;++y) {
-					for (int x=0;x<=100;++x) {
-						glVertex2f((x-0.25f)*pxpercm, (y-0.25f)*pxpercm);
-						glVertex2f((x+0.25f)*pxpercm, (y+0.25f)*pxpercm);
-						glVertex2f((x-0.25f)*pxpercm, (y+0.25f)*pxpercm);
-						glVertex2f((x+0.25f)*pxpercm, (y-0.25f)*pxpercm);
-					}
-				}
-				glEnd();
-			}
-		}
-		for(int i=0;i<world.aB.size();++i) {
-			Magnetic cB=world.aB.get(i);
-			Shape r=cB.Region;
-			glColor4f(0.5f, 1f, 0.5f, 0.5f);
-			renderShape(r);
+	public void renderJoint() {
+		for(int i=0;i<world.joints.size();++i) {
+			Joint j=world.joints.get(i);
+			if (!j.enable) continue;
+			glColor4f(1f, 1f, 0f, 0.5f);
+			glBegin(GL_LINES);
+			glVertex2fWithZoomAndOffset((float)j.p1.position.x, (float)j.p1.position.y);
+			glVertex2fWithZoomAndOffset((float)j.p2.position.x, (float)j.p2.position.y);
+			glEnd();
 		}
 	}
-	
-	public void renderE() {
-		for(int i=0;i<world.aE.size();++i) {
-			ElectricField cE=world.aE.get(i);
-			Shape r=cE.Region;
-			glColor4f(1f, 0.5f, 0.5f, 0.5f);
-			renderShape(r);
-		}
-	}*/
 	
 	public void renderBoundary() {
 		for(int i=0;i<world.boundaries.size();++i) {
@@ -243,6 +215,20 @@ public class Renderer {
 			renderRectangle((Rectangle)r);
 		} else if (r instanceof Circle) {
 			renderCircle((Circle)r);
+		} else if (r instanceof NotShape) {
+			renderShape(((NotShape)r).org);
+		} else if (r instanceof OrShape) {
+			OrShape s=(OrShape)r;
+			renderShape(s.org1);
+			renderShape(s.org2);
+		} else if (r instanceof XorShape) {
+			XorShape s=(XorShape)r;
+			renderShape(s.org1);
+			renderShape(s.org2);
+		} else if (r instanceof AndShape) {
+			AndShape s=(AndShape)r;
+			renderShape(s.org1);
+			renderShape(s.org2);
 		}
 	}
 	
@@ -259,22 +245,30 @@ public class Renderer {
 		glEnd();
 	}
 	
+	public void renderCircle(Vector2D centre, double radius) {
+		renderCircle(centre, radius, 400);
+	}
+	
+	public void renderCircle(Vector2D centre, double radius, int ndi) {
+		glBegin(GL_LINES);
+		double di=2*Math.PI/ndi;
+		double lastx=centre.x+radius;
+		double lasty=centre.y+0d;
+		for(double i=0;i<2*Math.PI+di;i+=di) {
+			glVertex2f((float)lastx, (float)lasty);
+			lastx=centre.x+radius*Math.cos(i);
+			lasty=centre.y+radius*Math.sin(i);
+			glVertex2f((float)lastx, (float)lasty);
+		}
+		glEnd();
+	}
+	
 	public void renderCircle(Circle r) {
 		renderCircle(r,400);
 	}
 	
 	public void renderCircle(Circle r, int ndi) {
-		glBegin(GL_LINES);
-		double di=Math.PI/ndi;
-		double lastx=r.centre.x+r.radius;
-		double lasty=r.centre.y+0d;
-		for(double i=0;i<2*Math.PI;i+=di) {
-			glVertex2fWithZoomAndOffset((float)lastx*pxPerUnit, (float)lasty);
-			lastx=r.centre.x+r.radius*Math.cos(i);
-			lasty=r.centre.y+r.radius*Math.sin(i);
-			glVertex2fWithZoomAndOffset((float)lastx, (float)lasty);
-		}
-		glEnd();
+		renderCircle(r.centre.mul(zoomwithpxPerUnit).add(zoomedOffset), r.radius*zoomwithpxPerUnit, ndi);
 	}
 	
 	public void renderWorld() {
@@ -289,10 +283,29 @@ public class Renderer {
 	}
 	
 	public void renderParticle(Particle p) {
-		glBegin(GL_POINTS);
-		glVertex2f((float)getOffset().x*pxPerUnit*getZoom() + (float)p.position.x*pxPerUnit*getZoom(), (float)getOffset().y*pxPerUnit*getZoom() + (float)p.position.y*pxPerUnit*getZoom());
-		glEnd();
-		if (renderVelocity) {
+		if (internalRenderParticleAsDot) {
+			glBegin(GL_POINTS);
+			glVertex2fWithZoomAndOffset((float)p.position.x, (float)p.position.y);
+			glEnd();
+		} else {
+			Vector2D centre=p.position.mul(zoomwithpxPerUnit).add(zoomedOffset);
+			renderCircle(centre,5,20);
+			if (p.q>0d) {
+				glBegin(GL_LINES);
+				glVertex2f((float)(centre.x-5), (float)(centre.y));
+				glVertex2f((float)(centre.x+5), (float)(centre.y));
+				glVertex2f((float)(centre.x), (float)(centre.y-5));
+				glVertex2f((float)(centre.x), (float)(centre.y+5));
+				glEnd();
+			} else if (p.q<0d) {
+				glBegin(GL_LINES);
+				glVertex2f((float)(centre.x-5), (float)(centre.y));
+				glVertex2f((float)(centre.x+5), (float)(centre.y));
+				glEnd();
+			}
+		}
+		
+		if (renderVelocity && !p.fixed) {
 			renderVector(p.velocity);
 		}
 	}
