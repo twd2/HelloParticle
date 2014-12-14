@@ -3,6 +3,11 @@ package org.twd2.game.HelloParticle.Field;
 import org.twd2.game.HelloParticle.Math.Vector2D;
 import org.twd2.game.HelloParticle.Physics.Particle;
 
+/**
+ * 磁场 
+ * @author twd2
+ *
+ */
 public class Magnetic extends Field {
 
 	public boolean direction=true; //true: 垂直屏幕向外, false: 垂直屏幕向里

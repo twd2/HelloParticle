@@ -297,6 +297,14 @@ public class Examples {
 		Rope j2=new Rope(p0,p2,p0.position.add(p2.position.mul(-1)).length(),50);
 		world.addJoint(j2);
 		
+		Particle p3=new Particle(1d,new Vector2D(0,4));
+		p3.q=-1d;
+		p3.velocity=new Vector2D(0d,0d);
+		world.addParticle(p3);
+		
+		Rope j3=new Rope(p0,p3,p0.position.add(p3.position.mul(-1)).length(),4500);
+		world.addJoint(j3);
+		
 		Line ln=new Line(-100,-10,100,-10);
 		ln.k=1;
 		world.addBoundary(ln);

@@ -12,7 +12,18 @@ public class Rope extends Joint {
 
 	public double k=1e5;
 	public double length=0;
+	
+	/**
+	 * 断掉的力, 小于零则绳子不会断掉
+	 */
 	public double maxForce=-1d;
+	
+	public Rope(Particle p1, Particle p2) {
+		this.p1=p1;
+		this.p2=p2;
+		k=Math.sqrt(p1.m*p2.m)*1e5;
+		this.length=p1.position.add(p2.position.mul(-1)).length();
+	}
 	
 	public Rope(Particle p1, Particle p2, double length) {
 		this.p1=p1;
