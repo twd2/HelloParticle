@@ -247,7 +247,7 @@ public class World {
 			 //	 System.out.println("!");
 			 //}
 			 //Line s=new Line(p.position, p.newPosition(dt));
-			 Line s=new Line(p.position, p.newPositionEstimate(dt));
+			 Line s=new Line(p.position, p.newPositionEstimateIn(dt));
 			 for(int j=0;j<boundaries.size();++j) {
 				 Line cB=boundaries.get(j);
 				 IntersectionResult ir=cB.findIntersection(s);

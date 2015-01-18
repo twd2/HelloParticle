@@ -374,6 +374,9 @@ public class Examples {
 	 * @param world
 	 */
 	public static void ex9(World world) {
+		world.addField(world.defaultGravity);
+		world.addField(new Resistance(1d));
+		
 		world.enableGravity=false;
 		world.enableCoulombForce=false;
 		
@@ -403,6 +406,63 @@ public class Examples {
 		
 		Spring s=new Spring(p1,p2,1e4,10);
 		world.addJoint(s);
+	}
+	/**
+	 * 还是绳子
+	 * @param world
+	 */
+	public static void ex10(World world) {
+		world.addField(world.defaultGravity);
+		world.addField(new Electric(5d,9d));
+		world.addField(new ElectricResistance(1d));
+		
+		
+		world.enableGravity=false;
+		world.enableCoulombForce=false;
+		
+		Particle p0=new Particle(1,new Vector2D(0,0));
+		p0.fixed=true;
+		world.addParticle(p0);
+		
+		Particle p1=new Particle(1,new Vector2D(0,5));
+		//p1.q=1d;
+		p1.velocity=new Vector2D(10d,0d);
+		world.addParticle(p1);
+		
+		Rope j1=new Rope(p0,p1,p0.position.add(p1.position.mul(-1)).length(),70);
+		world.addJoint(j1);
+		
+		Particle p2=new Particle(1d,new Vector2D(0,-5));
+		p2.q=1d;
+		p2.velocity=new Vector2D(10d,0d);
+		world.addParticle(p2);
+		
+		Rope j2=new Rope(p0,p2,p0.position.add(p2.position.mul(-1)).length(),5000);
+		world.addJoint(j2);
+		
+		Particle p3=new Particle(1d,new Vector2D(0,4));
+		p3.q=-1d;
+		p3.velocity=new Vector2D(0d,0d);
+		world.addParticle(p3);
+		
+		Rope j3=new Rope(p2,p3,p2.position.add(p3.position.mul(-1)).length(),4500);
+		world.addJoint(j3);
+		
+		Line ln=new Line(-100,-50,100,-50);
+		ln.k=1;
+		world.addBoundary(ln);
+		
+		Line ln1=new Line(-100,50,100,50);
+		ln1.k=1;
+		world.addBoundary(ln1);
+		
+		Line ln2=new Line(100,-50,100,50);
+		ln2.k=1;
+		world.addBoundary(ln2);
+		
+		Line ln3=new Line(-100,-50,-100,50);
+		ln3.k=1;
+		world.addBoundary(ln3);
 	}
 	
 }

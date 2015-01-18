@@ -33,9 +33,44 @@ public class Particle {
 		return position.add(velocity.mul(dt).add(acceleration.mul(0.5d*dt*dt))); //delta=v0*t+1/2*a*t*t
 	}
 	
-	public Vector2D newPositionEstimate(double dt) {
+	/**
+	 * 不足
+	 * @param dt
+	 * @return
+	 */
+	public Vector2D newPositionEstimateIn(double dt) {
 		if (fixed) return position;
 		return position.add(velocity.mul(dt)); //delta=v0*t
+	}
+	
+	/**
+	 * 过剩
+	 * @param dt
+	 * @return
+	 */
+	public Vector2D newPositionEstimateEx(double dt) {
+		if (fixed) return position;
+		return position.add(velocity.add(acceleration.mul(dt)).mul(dt)); //delta=(v0+at)*t
+	}
+	
+	/**
+	 * 不足
+	 * @param dt
+	 * @return
+	 */
+	public Vector2D newVelocityEstimateIn(double dt) {
+		if (fixed) return position;
+		return velocity; //delta=v0*t
+	}
+	
+	/**
+	 * 过剩
+	 * @param dt
+	 * @return
+	 */
+	public Vector2D newVelocityEstimateEx(double dt) {
+		if (fixed) return position;
+		return velocity.add(acceleration.mul(dt)); //delta=(v0+at)*t
 	}
 	
 	public void addForce(Vector2D f) {

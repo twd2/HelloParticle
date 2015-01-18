@@ -32,7 +32,7 @@ public class Hello {
 	public void printInfo() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("万呆的HelloParticle\r\n");
-		sb.append("红色边界: 电场, 绿色边界: 磁场\r\n");
+		sb.append("红色边界: 电场, 绿色边界: 磁场, 灰色边界: 惊悚区域\r\n");
 		sb.append("操作说明: \r\n");
 		sb.append("\tEsc\t退出\r\n");
 		sb.append("\t0\t重置坐标原点\r\n");
@@ -60,7 +60,7 @@ public class Hello {
 		mouseParticle.fixed=true;
 		//mouseParticle.q=1000d;
 		world.addParticle(mouseParticle);
-		Examples.ex9(world);
+		Examples.ex10(world);
 	}
     
 	public void start() {

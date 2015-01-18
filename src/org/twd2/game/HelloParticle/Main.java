@@ -7,6 +7,11 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		// TODO 自动生成的方法存根
+		tests();
+		new Hello().start();
+	}
+	
+	public static void tests() {
 		/*Vector2D a=new Vector2D(1,1);
 		Vector2D b=Vector2D.makeNew(1, 45.0f/180.0f*(float)Math.PI);
 		Vector2D c=new Vector2D(2,3);
@@ -31,7 +36,6 @@ public class Main {
 		System.out.println(ir.type);
 		System.out.println(ir.Intersection);
 		System.exit(0);*/
-		new Hello().start();
 	}
 
 }

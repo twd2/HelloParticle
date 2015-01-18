@@ -5,7 +5,7 @@ import org.twd2.game.HelloParticle.Shape.Rectangle;
 
 public class Line {
 	
-	public Vector2D p0, p1;
+	public Vector2D p0, p1, unitNormalVec;//, direction;
 	public Rectangle rect;
 	
 	public double A,B,C;
@@ -19,6 +19,8 @@ public class Line {
 		A=p1.y-p0.y;
 		B=p0.x-p1.x;
 		C=-A*p0.x-B*p0.y;
+		//direction=new Vector2D(-B,A);
+		unitNormalVec=p0.add(p1.mul(-1)).rotatePositive90().unit();
 	}
 	
 	public Line(double x0, double y0, double x1, double y1) { 
@@ -28,6 +30,8 @@ public class Line {
 		A=p1.y-p0.y;
 		B=p0.x-p1.x;
 		C=-A*p0.x-B*p0.y;
+		//direction=new Vector2D(-B,A);
+		unitNormalVec=p0.add(p1.mul(-1)).rotatePositive90().unit();
 	}
 	
 	/**
@@ -87,9 +91,9 @@ public class Line {
 	 * 方向向量
 	 * @return 方向向量
 	 */
-	public Vector2D getDirection() {
-		return new Vector2D(-B,A);
-	}
+	/*public Vector2D getDirection() {
+		return direction;
+	}*/
 	
 	/**
 	 * 对称点
@@ -97,7 +101,9 @@ public class Line {
 	 * @return 对称点
 	 */
 	public Vector2D getSymmetry(Vector2D p) {
-		Vector2D dir=getDirection();
+		Vector2D H=unitNormalVec.mul(p.DotP(unitNormalVec));
+		return p.add(H.mul(-2));
+		/*Vector2D dir=getDirection();
 		double C1,C2;
 		//XcXa+YcYa-YbYa-XbXa=0
 		//XcYa-YcXa+YaXb-XaYb=0
@@ -105,7 +111,7 @@ public class Line {
 		C2=dir.y*p.x-dir.x*p.y;
 		Equation2Val equ=new Equation2Val(dir.x,dir.y,C1,dir.y,-dir.x,C2);
 		Solution sol=equ.getSolution();
-		return sol.Solution;
+		return sol.Solution;*/
 	}
 	
 }
